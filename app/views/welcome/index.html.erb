@@ -3,7 +3,15 @@
 	<%= image_tag session[:current_user][:image] %>
 	<p><%= session[:current_user][:nickname] %></p>
 	<p><%= session[:current_user][:uid] %></p>
+	<ul>
+		<% @friends.each do |friend| %>
+			<li><%=   Date.strptime(friend['friend_since'].to_s, '%s').to_formatted_s(:rfc822) %> - <%= friend['steamid'] %></li>
+		<% end %>
+	</ul>
 <%else%>
 	<p>Please, sigh in thought steam: </p>
 	<%= link_to image_tag("http://cdn.steamcommunity.com/public/images/signinthroughsteam/sits_large_noborder.png"), '/auth/steam' %>
+	
 <% end %>
+
+
