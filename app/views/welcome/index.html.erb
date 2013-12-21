@@ -1,17 +1,57 @@
-<h1>Welcome</h1>
 <% if session.key? :current_user %>
-	<%= image_tag session[:current_user][:image] %>
-	<p><%= session[:current_user][:nickname] %></p>
-	<p><%= session[:current_user][:uid] %></p>
-	<ul>
-		<% @friends.each do |friend| %>
-			<li><%=   Date.strptime(friend['friend_since'].to_s, '%s').to_formatted_s(:rfc822) %> - <%= friend['steamid'] %></li>
+	<div class="freindlist">
+		<h1>Friends</h1>
+		<ui class="list-group" data-bind="foreach: { data: friendsToShow }">
+			<li class="list-group-item">
+				<img width="32px" height="32px" data-bind='attr:{src: $data["friendavatar"]}' />  
+				<p><span data-bind='text: $data["friendnick"]'> </span></p>
+			</li>
+		</ui>
+		<ui class="list-group;">
+			<li class="list-group-item non-select-list" data-bind='click: changeType'>
+				View all
+			</li>
+		</ui>
+	</div>
+<% end %>
+<div class="newslist">
+	<h1>News for Team Fotress 2</h1>
+	<ul class="list-group">
+		<% @news.each do |n| %>
+			<li class="list-group-item">
+				<h2><%=   n[:title] %></h2> 
+				<p><%=  n[:news] %></p>	
+				<p><%= link_to "Learn more", n[:url]%></p>	
+			</li>
 		<% end %>
 	</ul>
-<%else%>
-	<p>Please, sigh in thought steam: </p>
-	<%= link_to image_tag("http://cdn.steamcommunity.com/public/images/signinthroughsteam/sits_large_noborder.png"), '/auth/steam' %>
 	
-<% end %>
+
+</div>
 
 
+
+<script type="text/javascript" charset="utf-8">
+var friends_arr = <%= raw @friends.to_json %>;
+var FreindsModel = function() {
+    this.friends = ko.observableArray(friends_arr);
+ 
+    this.flag = ko.observable(false);
+ 	this.changeType = function() {
+ 		this.flag(!this.flag());
+ 	};
+    this.friendsToShow = ko.computed(function() {
+        var desiredType = this.flag();
+        if (desiredType == true) return this.friends();
+        return ko.utils.arrayFilter(this.friends(), function(freind){return freind["personastate"] == 1; });
+    }, this);
+ 
+    // Animation callbacks for the planets list
+    this.showFreindElement = function(element) { if (element.nodeType === 1) $(element).hide().slideDown(); };
+    this.hideFreindElement = function(element) { if (element.nodeType === 1) $(element).slideUp(function() { $(element).remove(); }) };
+};
+ 
+ 
+ko.applyBindings(new FreindsModel());
+
+</script>

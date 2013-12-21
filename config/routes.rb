@@ -1,7 +1,11 @@
 Steam::Application.routes.draw do
+  get "welcome/news"
+
+  get "signin/sighin_page"
+
   get "welcome/index"
   root :to => 'welcome#index'
-  post 'auth/steam/callback' => 'welcome#auth_callback'
+  post 'auth/steam/callback' => 'signin#auth_callback'
   
   # The priority is based upon order of creation:
   # first created -> highest priority.
