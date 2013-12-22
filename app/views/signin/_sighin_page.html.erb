@@ -3,7 +3,7 @@
 		<p class="name"><%= session[:current_user][:nickname] %></p>
 		
 	<%else%>
-		<p>Please, sigh in thought steam: </p>
+		<p>Please, sign in thought steam: </p>
 		<%= link_to image_tag("http://cdn.steamcommunity.com/public/images/signinthroughsteam/sits_large_noborder.png"), '/auth/steam' %>
 		
 <% end %>
