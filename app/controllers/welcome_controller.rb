@@ -23,7 +23,6 @@ class WelcomeController < ApplicationController
     @news = []
     @app_name = "Team Fortress 2"
     @friends = Array.new
-    @max_freinds_to_show = 2
     if session.key? :current_user
       url = "http://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key=#{ENV['STEAM_WEB_API_KEY']}&steamid=#{session[:current_user][:uid]}&relationship=friend"
       uri = URI.parse(url)
@@ -37,6 +36,7 @@ class WelcomeController < ApplicationController
         @friends << {:friendnick => res["personaname"], :friendavatar => res["avatar"], :personastate => res["personastate"]}
       end
     end
+    news
   end
 
 end
